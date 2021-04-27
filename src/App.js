@@ -21,12 +21,28 @@ function App() {
 
   const addRowHandler = () => {
     // setRowData(rowData => [...rowData,{id: '',Name: '',Email: '',Gender: '',DOB: '',Country: '',City: ''}]);
-    gridApi.applyTransaction({add: [{id: '',Name: '',Email: '',Gender: '',DOB: '',Country: '',City: ''}]})
+    gridApi.applyTransaction({add: [{id: null,Name: null,Email: null,Gender: null,DOB: null,Country: null,City: null}]})
   }
 
   function onSubmitClicked() {
     var rowData = [];
-    gridApi.forEachNode(node => rowData.push(node.data));
+    var errors = false;
+    gridApi.forEachNode(node => {
+      for(let key in node.data){
+        if(node.data[key] === null){
+          node.data[key] = '';
+        }
+      }
+      if(node.data.id==='' || node.data.Name==='' || node.data.Email===''|| node.data.Gender===''|| node.data.DOB===''|| node.data.Country===''|| node.data.City===''){
+        errors = true;
+      }
+      rowData.push(node.data)
+    });
+    if(errors){
+        alert('Fix the errors');
+        gridApi.refreshCells();
+        return;
+    }
     setSubmitData(rowData);
     var localdata = []
     rowData.forEach(elem => localdata.push(JSON.stringify(elem)));
@@ -62,13 +78,23 @@ function App() {
   }
 
   const cellGender = (params) => {
-    return(
-      <select value={params.value} className='gender' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => genderValueSetter(params,e)}>
-        <option value='' disabled>Gender</option>
-        <option value='Male'>Male</option>
-        <option value='Female'>Female</option>
-      </select>
-    )
+    if(params.value === null){
+      return(
+        <select value='' className='gender' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => genderValueSetter(params,e)}>
+          <option value='' disabled>Gender</option>
+          <option value='Male'>Male</option>
+          <option value='Female'>Female</option>
+        </select>
+      )
+    }else{
+      return(
+        <select value={params.value} className='gender' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => genderValueSetter(params,e)}>
+          <option value='' disabled>Gender</option>
+          <option value='Male'>Male</option>
+          <option value='Female'>Female</option>
+        </select>
+      )
+    }
   }
 
   const dobValueSetter = (params,e) => {
@@ -84,7 +110,7 @@ function App() {
   }
 
   const cellDOB = (params) => {
-    if(params.data.DOB === ''){
+    if(params.data.DOB === '' || params.data.DOB === null){
       return(
         <DatePicker style={{backgroundColor: 'transparent',border: 'none'}} placeholder="DOB" onChange={(e) => dobValueSetter(params,e)}/>
       )
@@ -125,12 +151,21 @@ function App() {
       options.push(keys);
     }
     var data = options.map(value => <option key={value} value={value}>{value}</option>)
-    return(
-      <select value={params.value} className='country' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => countryValueSetter(params,e)}>
-        <option value="" disabled>Country</option>
-        {data}
-      </select>
-    )
+    if(params.value === null){
+      return(
+        <select value='' className='country' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => countryValueSetter(params,e)}>
+          <option value="" disabled>Country</option>
+          {data}
+        </select>
+      )
+    }else{
+      return(
+        <select value={params.value} className='country' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => countryValueSetter(params,e)}>
+          <option value="" disabled>Country</option>
+          {data}
+        </select>
+      )
+    }
   }
 
   const cityValueSetter = (params,e) => {
@@ -149,7 +184,7 @@ function App() {
       params.api.refreshCells();
     }
     var options = [];
-    if(params.data.Country !== ''){
+    if(params.data.Country !== null && params.data.Country !== ''){
       for(let i=0;i<countryData[params.data.Country].length;i++){
         options.push(countryData[params.data.Country][i]);
       }
@@ -157,12 +192,87 @@ function App() {
     console.log(params)
     var data = options.map(value => <option key={Math.random()+params.data.id+value} value={value}>{value}</option>)
     
-    return(
-      <select value={params.data.City} className='city' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => cityValueSetter(params,e)}>
-        <option value="" disabled>City</option>
-        {data}
-      </select>
+    if(params.data.City === null){
+      return(
+        <select value='' className='city' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => cityValueSetter(params,e)}>
+          <option value="" disabled>City</option>
+          {data}
+        </select>
+      )
+    }else{
+      return(
+        <select value={params.data.City} className='city' style={{border:'none',width:'100%',background: 'transparent'}} onChange={(e) => cityValueSetter(params,e)}>
+          <option value="" disabled>City</option>
+          {data}
+        </select>
+      )
+    }
+  }
+
+  const idValueSetter = (params,e) => {
+    // var index = rowData.findIndex(entry => entry===params.data)
+    // console.log(index);
+    params.data.id = e.target.value;
+    // var updatedData = [...rowData];
+    // updatedData[index] = params.data;
+    // setRowData(updatedData);
+    params.api.refreshCells();
+  }
+
+  const cellId = (params) => {
+   if(params.data.id === null){
+    return (
+      <input type="text" className="inputCell" value='' style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => idValueSetter(params,e)}/>
     )
+   }else{
+    return (
+      <input type="text" className="inputCell" value={params.data.id} style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => idValueSetter(params,e)}/>
+    )
+   }
+  }
+
+  const nameValueSetter = (params,e) => {
+    // var index = rowData.findIndex(entry => entry===params.data)
+    // console.log(index);
+    params.data.Name = e.target.value;
+    // var updatedData = [...rowData];
+    // updatedData[index] = params.data;
+    // setRowData(updatedData);
+    params.api.refreshCells();
+  }
+
+  const cellName = (params) => {
+   if(params.data.Name === null){
+    return (
+      <input type="text" className="inputCell" value='' style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => nameValueSetter(params,e)}/>
+    )
+   }else{
+    return (
+      <input type="text" className="inputCell" value={params.data.Name} style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => nameValueSetter(params,e)}/>
+    )
+   }
+  }
+
+  const emailValueSetter = (params,e) => {
+    // var index = rowData.findIndex(entry => entry===params.data)
+    // console.log(index);
+    params.data.Email = e.target.value;
+    // var updatedData = [...rowData];
+    // updatedData[index] = params.data;
+    // setRowData(updatedData);
+    params.api.refreshCells();
+  }
+
+  const cellEmail = (params) => {
+   if(params.data.Email === null){
+    return (
+      <input type="text" className="inputCell" value='' style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => emailValueSetter(params,e)}/>
+    )
+   }else{
+    return (
+      <input type="text" className="inputCell" value={params.data.Email} style={{width: '100%',border:'none',backgroundColor:'transparent'}} onChange={(e) => emailValueSetter(params,e)}/>
+    )
+   }
   }
 
   const cellDelete = (params) => {
@@ -172,20 +282,33 @@ function App() {
   }
 
   const nameValidation = (params) => {
+    if(params.data.Name === null){
+      return {
+        padding: 0,
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.Name.length <= 0){
       return {
+        padding: 0,
         backgroundColor: 'red'
       }
     }else if(params.data.Name.length < 3){
       return {
+        padding: 0,
         backgroundColor: 'yellow'
       }
     }else{
-      return {backgroundColor: 'transparent'}
+      return {padding: 0,backgroundColor: 'transparent'}
     }
   }
 
   const idValidation = (params) => {
+    if(params.data.id === null){
+      return {
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.id.length <= 0){
       return {
         backgroundColor: 'red'
@@ -196,8 +319,15 @@ function App() {
   }
 
   const emailValidation = (params) => {
+    if(params.data.Email === null){
+      return {
+        padding: 0,
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.Email.length <= 0){
       return {
+        padding: 0,
         backgroundColor: 'red'
       }
     }
@@ -205,12 +335,17 @@ function App() {
     var atposition=x.indexOf("@");  
     var dotposition=x.lastIndexOf(".");  
     if (atposition<1 || dotposition<atposition+2 || dotposition+2>=x.length){  
-      return {backgroundColor: 'yellow'};  
+      return {padding: 0,backgroundColor: 'yellow'};  
     }  
-    return {backgroundColor: 'transparent'};
+    return {padding: 0,backgroundColor: 'transparent'};
   }
 
   const genderValidation = (params) => {
+    if(params.data.Gender === null){
+      return {
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.Gender === ''){
       return {backgroundColor: 'red'}
     }else{
@@ -220,6 +355,12 @@ function App() {
 
   const dobValidation = (params) => {
     console.log(params.data);
+    if(params.data.DOB === null){
+      return {
+        padding: 0,
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.DOB === ''){
       return {
         padding: 0,
@@ -234,6 +375,11 @@ function App() {
   }
 
   const countryValidation = (params) => {
+    if(params.data.Country === null){
+      return {
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.Country === ''){
       return {
         backgroundColor: 'red'
@@ -246,6 +392,11 @@ function App() {
   }
 
   const cityValidation = (params) => {
+    if(params.data.City === null){
+      return {
+        backgroundColor: 'transparent'
+      }
+    }
     if(params.data.City === ''){
       return {
         backgroundColor: 'red'
@@ -268,9 +419,9 @@ function App() {
           onGridReady={gridReady}
           rowSelection='multiple'
           rowData={rowData}>
-          <AgGridColumn field="id" editable={true} resizable={true} pinned='left' checkboxSelection={true} sortable={true} filter={true} cellStyle={idValidation}></AgGridColumn>
-          <AgGridColumn field="Name" editable={true} resizable={true} pinned='left' sortable={true} filter={true} cellStyle={nameValidation}></AgGridColumn>
-          <AgGridColumn field="Email" editable={true} resizable={true} sortable={true} filter={true} cellStyle={emailValidation}></AgGridColumn>
+          <AgGridColumn field="id" resizable={true} pinned='left' checkboxSelection={true} sortable={true} filter={true} cellRendererFramework={cellId} cellStyle={idValidation}></AgGridColumn>
+          <AgGridColumn field="Name" resizable={true} pinned='left' sortable={true} filter={true} cellRendererFramework={cellName} cellStyle={nameValidation}></AgGridColumn>
+          <AgGridColumn field="Email" resizable={true} sortable={true} filter={true} cellRendererFramework={cellEmail} cellStyle={emailValidation}></AgGridColumn>
           <AgGridColumn field="Gender" resizable={true} sortable={true} filter={true} cellRendererFramework={cellGender} cellStyle={genderValidation}></AgGridColumn>
           <AgGridColumn field="DOB" resizable={true} sortable={true} filter={true} cellRendererFramework={cellDOB} cellStyle={dobValidation}></AgGridColumn>
           <AgGridColumn field="Country" resizable={true} sortable={true} filter={true} cellRendererFramework={cellCountry} cellStyle={countryValidation}></AgGridColumn>

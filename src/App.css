@@ -1,4 +1,4 @@
-.gender:focus,.country:focus,.city:focus {
+.gender:focus,.country:focus,.city:focus,.inputCell:focus {
   outline: none;
 }
 
