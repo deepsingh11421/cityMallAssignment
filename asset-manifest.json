@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/cityMallAssignment/static/css/main.bd160da4.chunk.css",
-    "main.js": "/cityMallAssignment/static/js/main.47c16756.chunk.js",
-    "main.js.map": "/cityMallAssignment/static/js/main.47c16756.chunk.js.map",
+    "main.js": "/cityMallAssignment/static/js/main.6d6c50b3.chunk.js",
+    "main.js.map": "/cityMallAssignment/static/js/main.6d6c50b3.chunk.js.map",
     "runtime-main.js": "/cityMallAssignment/static/js/runtime-main.f0938e7c.js",
     "runtime-main.js.map": "/cityMallAssignment/static/js/runtime-main.f0938e7c.js.map",
     "static/css/2.0a5ec43b.chunk.css": "/cityMallAssignment/static/css/2.0a5ec43b.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.0a5ec43b.chunk.css",
     "static/js/2.345a67ff.chunk.js",
     "static/css/main.bd160da4.chunk.css",
-    "static/js/main.47c16756.chunk.js"
+    "static/js/main.6d6c50b3.chunk.js"
   ]
 }
