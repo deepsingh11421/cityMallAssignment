@@ -1,22 +1,19 @@
 const nameValidation = (params) => {
     if(params.data.Name === null){
       return {
-        padding: 0,
         backgroundColor: 'transparent'
       }
     }
     if(params.data.Name.length <= 0){
       return {
-        padding: 0,
         backgroundColor: 'red'
       }
     }else if(params.data.Name.length < 3){
       return {
-        padding: 0,
         backgroundColor: 'yellow'
       }
     }else{
-      return {padding: 0,backgroundColor: 'transparent'}
+      return {backgroundColor: 'transparent'}
     }
   }
 
@@ -38,13 +35,11 @@ const nameValidation = (params) => {
   const emailValidation = (params) => {
     if(params.data.Email === null){
       return {
-        padding: 0,
         backgroundColor: 'transparent'
       }
     }
     if(params.data.Email.length <= 0){
       return {
-        padding: 0,
         backgroundColor: 'red'
       }
     }
@@ -52,9 +47,9 @@ const nameValidation = (params) => {
     var atposition=x.indexOf("@");  
     var dotposition=x.lastIndexOf(".");  
     if (atposition<1 || dotposition<atposition+2 || dotposition+2>=x.length){  
-      return {padding: 0,backgroundColor: 'yellow'};  
+      return {backgroundColor: 'yellow'};  
     }  
-    return {padding: 0,backgroundColor: 'transparent'};
+    return {backgroundColor: 'transparent'};
   }
 
   const genderValidation = (params) => {
