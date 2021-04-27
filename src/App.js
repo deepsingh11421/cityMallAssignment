@@ -10,6 +10,7 @@ import {idValidation,nameValidation,emailValidation,genderValidation,dobValidati
 
 function App() {
   const [gridApi, setGridApi] = useState(null);
+  const [gridSubmitApi,setGridSubmitApi] = useState(null);
   const [submitData, setSubmitData] = useState((localStorage.getItem('localData')===null)?[]:JSON.parse(localStorage.getItem('localData')));
   
   const [rowData,setRowData] = useState((localStorage.getItem('localData')===null)?[
@@ -46,6 +47,7 @@ function App() {
     rowData.forEach(elem => localdata.push(JSON.stringify(elem)));
     localStorage.setItem('localData','['+localdata+']');
     alert('Submitted');
+    gridSubmitApi.redrawRows();
   }
 
   function onRemoveSelected() {
@@ -69,6 +71,7 @@ function App() {
   }
 
   const gridReadySubmit = (params) => {
+    setGridSubmitApi(params.api);
     params.api.sizeColumnsToFit();
   }
 
