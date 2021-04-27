@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/index.css","webpack://src/App.css"],"names":[],"mappings":"AAAA,KACE,QACF,CCFA,yCACE,YACF,CAEA,QACE,cACF","file":"main.792b3fdf.chunk.css","sourcesContent":["body {\n  margin: 0px;\n}",".gender:focus,.country:focus,.city:focus {\n  outline: none;\n}\n\n.delRow {\n  cursor: pointer;\n}"]}
